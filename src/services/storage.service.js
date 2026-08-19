@@ -1,13 +1,13 @@
 export const STORAGE_KEYS = {
-  USER: "continuum_user",
-  ASSETS: "continuum_assets",
-  PEOPLE: "continuum_people",
-  DOCUMENTS: "continuum_documents",
-  PERMISSIONS: "continuum_permissions",
-  CONTINUITY: "continuum_continuity",
-  NOTIFICATIONS: "continuum_notifications",
-  ACTIVITY: "continuum_activity",
-  VIEW_MODE: "continuum_view_mode",
+  USER: "continuity_user",
+  ASSETS: "continuity_assets",
+  PEOPLE: "continuity_people",
+  DOCUMENTS: "continuity_documents",
+  PERMISSIONS: "continuity_permissions",
+  CONTINUITY: "continuity_continuity",
+  NOTIFICATIONS: "continuity_notifications",
+  ACTIVITY: "continuity_activity",
+  VIEW_MODE: "continuity_view_mode",
 };
 
 export const storageService = {

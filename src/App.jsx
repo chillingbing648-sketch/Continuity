@@ -138,15 +138,15 @@ const Icons = {
 
 // ─── STORAGE SERVICE ────────────────────────────────────────────────────────
 const STORAGE_KEYS = {
-  USER: "continuum_user",
-  ASSETS: "continuum_assets",
-  PEOPLE: "continuum_people",
-  DOCUMENTS: "continuum_documents",
-  PERMISSIONS: "continuum_permissions",
-  CONTINUITY: "continuum_continuity",
-  NOTIFICATIONS: "continuum_notifications",
-  ACTIVITY: "continuum_activity",
-  VIEW_MODE: "continuum_view_mode",
+  USER: "continuity_user",
+  ASSETS: "continuity_assets",
+  PEOPLE: "continuity_people",
+  DOCUMENTS: "continuity_documents",
+  PERMISSIONS: "continuity_permissions",
+  CONTINUITY: "continuity_continuity",
+  NOTIFICATIONS: "continuity_notifications",
+  ACTIVITY: "continuity_activity",
+  VIEW_MODE: "continuity_view_mode",
 };
 
 const storageService = {
@@ -1053,7 +1053,7 @@ function Sidebar({ current, onNav, user, open }) {
             <LogoIcon />
           </div>
           <div>
-            <div className="logo-text">Continuum</div>
+            <div className="logo-text">Continuity</div>
             <div className="logo-sub">Keep what matters, connected.</div>
           </div>
         </div>
@@ -3804,7 +3804,7 @@ function Activity() {
         <EmptyState
           icon={Icons.activity}
           title="No activity yet"
-          desc="Your activity history will appear here as you use Continuum."
+          desc="Your activity history will appear here as you use continuity."
         />
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -4162,7 +4162,7 @@ function Settings() {
                   });
                   const a = document.createElement("a");
                   a.href = URL.createObjectURL(blob);
-                  a.download = "continuum-export.json";
+                  a.download = "continuity-export.json";
                   a.click();
                   showToast("Data exported.");
                 }}
