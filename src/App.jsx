@@ -691,7 +691,7 @@ body {
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 16px;
-    --sidebar-w: 240px;
+    --sidebar-w: 232px;
     --font: 'Inter', system-ui, -apple-system, sans-serif;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -773,10 +773,9 @@ body {
 
 .content {
   width: 100%;
-  max-width: 1100px;
-  min-width: 0;
-  padding: 28px;
+  max-width: 1360px;
   margin: 0 auto;
+  padding: 24px 32px;
 }
   /* CARDS */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); }
