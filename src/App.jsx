@@ -648,6 +648,25 @@ function AppProvider({ children }) {
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 const styles = `
+/* GLOBAL BOX SIZING */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
   :root {
     --bg: #F7F6F3;
     --surface: #FFFFFF;
@@ -678,9 +697,27 @@ const styles = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 15px; }
   body { font-family: var(--font); background: var(--bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
-  .app { display: flex; height: 100vh; overflow: hidden; }
+.app {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 100vh;
+  overflow: hidden;
+}
   /* SIDEBAR */
-  .sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 40; }
+  .sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 40; }@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+}
   .sidebar-logo { padding: 20px 20px 16px; border-bottom: 1px solid var(--border-light); }
   .logo-mark { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
@@ -698,11 +735,49 @@ const styles = `
   .user-card { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; }
   .user-card:hover { background: var(--surface-alt); }
   /* MAIN */
-  .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-  .topbar { padding: 16px 28px; border-bottom: 1px solid var(--border-light); background: var(--surface); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .page-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
-  .page-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-top: 1px; }
-  .content { padding: 28px; max-width: 1100px; width: 100%; }
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.page-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.content {
+  width: 100%;
+  max-width: 1100px;
+  min-width: 0;
+  padding: 28px;
+  margin: 0 auto;
+}
   /* CARDS */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); }
   .card-hover { transition: box-shadow 0.2s, transform 0.15s; cursor: pointer; }
@@ -831,6 +906,116 @@ const styles = `
     .dashboard-hero { flex-direction: column; align-items: flex-start; }
     .topbar-actions { gap: 8px; }
   }
+  /* MOBILE NAVIGATION */
+
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-nav button {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .mobile-nav button.active {
+    background: var(--accent-light);
+    border-color: var(--accent-mid);
+    color: var(--accent);
+  }
+    html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+}
+}/* =========================================
+   MOBILE TOPBAR
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  .topbar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .page-title {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 0.78rem;
+    line-height: 1.3;
+    margin-top: 3px;
+  }
+}
+@media (max-width: 768px) {
+  .view-switcher {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .view-switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .view-switcher > * {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
 `;
 
 // ─── UTILITIES ───────────────────────────────────────────────────────────────
@@ -984,6 +1169,33 @@ function Modal({ title, subtitle, onClose, children, footer, size = "" }) {
       </div>
     </div>
   );
+  <div className="mobile-nav">
+  <button
+    className={activePage === "home" ? "active" : ""}
+    onClick={() => setActivePage("home")}
+  >
+    <Home size={18} />
+    <span>Home</span>
+  </button>
+
+  <button
+    className={activePage === "map" ? "active" : ""}
+    onClick={() => setActivePage("map")}
+  >
+    <Map size={18} />
+    <span>Map</span>
+  </button>
+
+  <button
+    className={activePage === "documents" ? "active" : ""}
+    onClick={() => setActivePage("documents")}
+  >
+    <FileText size={18} />
+    <span>Docs</span>
+  </button>
+
+  ...
+</div>
 }
 
 function Toast({ msg, type }) {
