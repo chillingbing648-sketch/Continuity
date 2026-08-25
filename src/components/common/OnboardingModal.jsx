@@ -41,7 +41,7 @@ export function OnboardingModal({ onClose }) {
     if (step < steps.length) {
       setStep(step + 1);
     } else {
-      showToast("Onboarding complete! Welcome to Continuity V2.");
+      showToast("Onboarding complete! Welcome to Continuity.");
       onClose();
     }
   };

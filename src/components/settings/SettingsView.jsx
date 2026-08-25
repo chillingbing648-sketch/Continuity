@@ -348,7 +348,7 @@ export function SettingsView() {
           </strong>
         </div>
         <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-          Continuity V2 authenticates sessions with Supabase Auth cryptographic JWT tokens. Application continuity records are stored locally with zero-knowledge data export options. In enterprise deployment, data vaults synchronize to row-level security (RLS) PostgreSQL database clusters with AES-256 encryption.
+          Continuity authenticates sessions with Supabase Auth cryptographic JWT tokens. Application continuity records are stored locally with zero-knowledge data export options. In enterprise deployment, data vaults synchronize to row-level security (RLS) PostgreSQL database clusters with AES-256 encryption.
         </p>
       </div>
     </div>

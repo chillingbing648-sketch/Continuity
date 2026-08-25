@@ -61,7 +61,7 @@ export function Sidebar({ currentTab, onNav }) {
           </div>
           <div>
             <div className="logo-text">Continuity</div>
-            <div className="logo-sub">Financial Continuity V2</div>
+            <div className="logo-sub">Financial Continuity</div>
           </div>
         </div>
       </div>
