@@ -32,6 +32,7 @@ import { ActivityView } from "./components/activity/ActivityView";
 import { SettingsView } from "./components/settings/SettingsView";
 import { TrustedPersonView } from "./components/trusted/TrustedPersonView";
 import { EmergencyGuideView } from "./components/trusted/EmergencyGuideView";
+import { LibraryPlaybookView } from "./components/library/LibraryPlaybookView";
 
 // Modals
 import { AssetDetailModal } from "./components/assets/AssetDetailModal";
@@ -48,7 +49,7 @@ import { ContinuitySimulationModal } from "./components/continuity/ContinuitySim
 import { ContinuityDrillModal } from "./components/continuity/ContinuityDrillModal";
 
 /* =========================================================================
-   AppShell — Existing Continuity application (unchanged)
+   AppShell — Existing Continuity application
    ========================================================================= */
 function AppShell() {
   const {
@@ -61,6 +62,9 @@ function AppShell() {
     setGlobalSearchOpen,
     isOnboardingOpen,
     setOnboardingOpen,
+    isDemoMode,
+    exitDemoMode,
+    handleResetDemo,
   } = useApp();
 
   const [currentTab, setCurrentTab] = useState("dashboard");
@@ -76,6 +80,8 @@ function AppShell() {
     switch (currentTab) {
       case "dashboard":
         return <DashboardView onNav={setCurrentTab} />;
+      case "library":
+        return <LibraryPlaybookView onNav={setCurrentTab} />;
       case "assets":
         return <AssetsView />;
       case "lifemap":
@@ -91,7 +97,7 @@ function AppShell() {
       case "activity":
         return <ActivityView />;
       case "settings":
-        return <SettingsView />;
+        return <SettingsView onNav={setCurrentTab} />;
       default:
         return <DashboardView onNav={setCurrentTab} />;
     }
@@ -104,6 +110,8 @@ function AppShell() {
     switch (currentTab) {
       case "dashboard":
         return "Financial Continuity Command Center";
+      case "library":
+        return "Library & System Playbook";
       case "assets":
         return "Assets & Liabilities Inventory";
       case "lifemap":
@@ -132,6 +140,53 @@ function AppShell() {
 
       {/* MAIN VIEWPORT */}
       <main className="main">
+        {/* DEMO MODE TOP BANNER */}
+        {isDemoMode && (
+          <div
+            style={{
+              background: "linear-gradient(90deg, #FFF3CD 0%, #FFEAA7 100%)",
+              borderBottom: "1px solid #FFEEBA",
+              color: "#856404",
+              padding: "10px 24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 10,
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              zIndex: 30,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Icons.alertTriangle size={16} style={{ color: "#856404" }} />
+              <span>
+                <strong>DEMO MODE:</strong> Reference Workspace — sample financial records loaded for demonstration. Changes will not affect your personal workspace.
+              </span>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                style={{ background: "white", color: "#856404", border: "1px solid #FFEEBA", fontSize: "0.78rem" }}
+                onClick={handleResetDemo}
+              >
+                <Icons.refresh size={13} />
+                Reset Demo Data
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                style={{ fontSize: "0.78rem" }}
+                onClick={exitDemoMode}
+              >
+                <Icons.user size={13} />
+                Exit Demo Mode
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* TOPBAR */}
         <header className="topbar">
           <div className="topbar-left">
@@ -181,7 +236,13 @@ function AppShell() {
       )}
 
       {isOnboardingOpen && (
-        <OnboardingModal onClose={() => setOnboardingOpen(false)} />
+        <OnboardingModal
+          onClose={() => setOnboardingOpen(false)}
+          onOpenPlaybook={() => {
+            setOnboardingOpen(false);
+            setCurrentTab("library");
+          }}
+        />
       )}
 
       {/* DYNAMIC MODAL ROUTER */}

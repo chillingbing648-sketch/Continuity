@@ -8,12 +8,94 @@ import { useApp } from "../../context/AppContext";
 import { timeAgo } from "../../utils/formatting";
 
 export function DashboardView({ onNav }) {
-  const { people, activity, continuity, openModal } = useApp();
+  const {
+    user,
+    assets,
+    people,
+    activity,
+    continuity,
+    openModal,
+    isDemoMode,
+    enterDemoMode,
+    setOnboardingOpen,
+  } = useApp();
 
   const primaryTrustee = people.find((p) => p.isPrimaryTrustee || p.role?.toLowerCase().includes("trustee"));
+  const hasAssets = assets.length > 0;
+  const displayName = user?.name || "there";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* 0. CLEAN WORKSPACE WELCOME BANNER (for new users without assets) */}
+      {!hasAssets && !isDemoMode && (
+        <div
+          className="card"
+          style={{
+            background: "linear-gradient(135deg, #1B4332 0%, #2D6A4F 60%, #40916C 100%)",
+            color: "white",
+            padding: "26px 30px",
+            border: "none",
+            boxShadow: "var(--shadow-md)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
+            <div style={{ maxWidth: 640 }}>
+              <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", opacity: 0.85, fontWeight: 700 }}>
+                Clean Workspace Active
+              </div>
+              <h2 style={{ fontSize: "1.45rem", fontWeight: 800, letterSpacing: "-0.02em", marginTop: 4 }}>
+                Welcome to Continuity, {displayName}
+              </h2>
+              <p style={{ fontSize: "0.9rem", opacity: 0.92, marginTop: 8, lineHeight: 1.55 }}>
+                Your financial continuity workspace is ready. Protect your loved ones by registering your assets, assigning verified nominees, and designating your trusted person.
+              </p>
+
+              <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ background: "white", color: "var(--accent)", border: "none", fontWeight: 700 }}
+                  onClick={() => openModal("addAsset")}
+                >
+                  <Icons.plus size={15} />
+                  Add Your First Asset
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ background: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.3)" }}
+                  onClick={() => openModal("addPerson")}
+                >
+                  <Icons.user size={15} />
+                  Add Trusted Person
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ background: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.3)" }}
+                  onClick={enterDemoMode}
+                >
+                  <Icons.sparkles size={15} />
+                  Explore Demo Mode
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ background: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.3)" }}
+                  onClick={() => onNav("library")}
+                >
+                  <Icons.guide size={15} />
+                  Open Library Playbook
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. CONTINUITY SCORE (Hero Card) */}
       <ContinuityScoreCard />
 
@@ -88,31 +170,37 @@ export function DashboardView({ onNav }) {
           </button>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {activity.slice(0, 3).map((act) => (
-            <div
-              key={act.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "8px 12px",
-                borderRadius: "var(--radius-sm)",
-                background: "var(--surface-alt)",
-                fontSize: "0.85rem",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{act.action}</span>
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>({act.affectedEntity})</span>
+        {activity.length === 0 ? (
+          <div style={{ padding: "16px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            No audit events recorded yet. Actions like adding assets or updating nominees will appear in this timeline.
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {activity.slice(0, 3).map((act) => (
+              <div
+                key={act.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "8px 12px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--surface-alt)",
+                  fontSize: "0.85rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
+                  <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{act.action}</span>
+                  <span style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>({act.affectedEntity})</span>
+                </div>
+                <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                  {timeAgo(act.timestamp)}
+                </span>
               </div>
-              <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                {timeAgo(act.timestamp)}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

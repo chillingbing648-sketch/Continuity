@@ -61,6 +61,39 @@ export function CommandPalette({ onNav }) {
       shortcut: "AI",
     },
     {
+      id: "open_playbook",
+      title: "Open Continuity Library & System Playbook",
+      category: "Guide",
+      icon: <Icons.guide size={16} />,
+      action: () => {
+        setCommandPaletteOpen(false);
+        onNav("library");
+      },
+      shortcut: "Book",
+    },
+    {
+      id: "explore_demo",
+      title: "Explore Demo Mode (Sample Reference Workspace)",
+      category: "Demo",
+      icon: <Icons.sparkles size={16} />,
+      action: () => {
+        setCommandPaletteOpen(false);
+        enterDemoMode();
+      },
+      shortcut: "Demo",
+    },
+    {
+      id: "exit_demo",
+      title: "Exit Demo Mode (Return to Personal Workspace)",
+      category: "Demo",
+      icon: <Icons.user size={16} />,
+      action: () => {
+        setCommandPaletteOpen(false);
+        exitDemoMode();
+      },
+      shortcut: "Exit",
+    },
+    {
       id: "add_asset",
       title: "Add Financial Asset / Liability",
       category: "Actions",

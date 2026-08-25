@@ -1,51 +1,155 @@
 export const STORAGE_KEYS = {
-  USER: "continuity_user",
-  ASSETS: "continuity_assets",
-  PEOPLE: "continuity_people",
-  DOCUMENTS: "continuity_documents",
-  OBLIGATIONS: "continuity_obligations",
-  PERMISSIONS: "continuity_permissions",
-  CONTINUITY: "continuity_continuity",
-  NOTIFICATIONS: "continuity_notifications",
-  ACTIVITY: "continuity_activity",
-  VIEW_MODE: "continuity_view_mode",
-  ONBOARDED: "continuity_onboarded",
+  USER: "user",
+  ASSETS: "assets",
+  PEOPLE: "people",
+  DOCUMENTS: "documents",
+  OBLIGATIONS: "obligations",
+  PERMISSIONS: "permissions",
+  CONTINUITY: "continuity",
+  NOTIFICATIONS: "notifications",
+  ACTIVITY: "activity",
+  VIEW_MODE: "view_mode",
+  ONBOARDED: "onboarded",
+};
+
+const getUserKey = (userId, key) => {
+  if (!userId) {
+    throw new Error(
+      "[StorageService] Authenticated user ID is required."
+    );
+  }
+
+  return `continuity:user:${userId}:${key}`;
+};
+
+const getDemoKey = (key) => {
+  return `continuity:demo:${key}`;
+};
+
+const parseValue = (value) => {
+  try {
+    return value ? JSON.parse(value) : null;
+  } catch {
+    return null;
+  }
 };
 
 export const storageService = {
-  get: (key) => {
+  get: (userId, key) => {
     try {
-      const v = localStorage.getItem(key);
-      return v ? JSON.parse(v) : null;
+      if (!userId) return null;
+      const storageKey = getUserKey(userId, key);
+      const value = localStorage.getItem(storageKey);
+
+      return parseValue(value);
     } catch (err) {
-      console.warn(`[StorageService] Failed to read key: ${key}`, err);
+      console.warn(
+        `[StorageService] Failed to read key: ${key} for user: ${userId}`,
+        err
+      );
       return null;
     }
   },
-  set: (key, value) => {
+
+  set: (userId, key, value) => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      if (!userId) return false;
+      const storageKey = getUserKey(userId, key);
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(value)
+      );
+
       return true;
     } catch (err) {
-      console.error(`[StorageService] Failed to set key: ${key}`, err);
+      console.error(
+        `[StorageService] Failed to set key: ${key} for user: ${userId}`,
+        err
+      );
       return false;
     }
   },
-  remove: (key) => {
+
+  remove: (userId, key) => {
     try {
-      localStorage.removeItem(key);
+      if (!userId) return false;
+      const storageKey = getUserKey(userId, key);
+
+      localStorage.removeItem(storageKey);
+
       return true;
     } catch (err) {
-      console.error(`[StorageService] Failed to remove key: ${key}`, err);
+      console.error(
+        `[StorageService] Failed to remove key: ${key} for user: ${userId}`,
+        err
+      );
       return false;
     }
   },
-  clearAll: () => {
+
+  clearAll: (userId) => {
     try {
-      Object.values(STORAGE_KEYS).forEach((k) => localStorage.removeItem(k));
+      if (!userId) {
+        throw new Error(
+          "[StorageService] Authenticated user ID is required to clear user storage."
+        );
+      }
+
+      Object.values(STORAGE_KEYS).forEach((key) => {
+        localStorage.removeItem(
+          getUserKey(userId, key)
+        );
+      });
+
       return true;
     } catch (err) {
-      console.error(`[StorageService] Failed to clear storage`, err);
+      console.error(
+        `[StorageService] Failed to clear user storage for: ${userId}`,
+        err
+      );
+      return false;
+    }
+  },
+
+  hasUserData: (userId) => {
+    try {
+      if (!userId) return false;
+      const userProfile = localStorage.getItem(getUserKey(userId, STORAGE_KEYS.USER));
+      return userProfile !== null;
+    } catch {
+      return false;
+    }
+  },
+
+  // Demo namespace helpers
+  getDemo: (key) => {
+    try {
+      const storageKey = getDemoKey(key);
+      const value = localStorage.getItem(storageKey);
+      return parseValue(value);
+    } catch {
+      return null;
+    }
+  },
+
+  setDemo: (key, value) => {
+    try {
+      const storageKey = getDemoKey(key);
+      localStorage.setItem(storageKey, JSON.stringify(value));
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
+  clearDemo: () => {
+    try {
+      Object.values(STORAGE_KEYS).forEach((key) => {
+        localStorage.removeItem(getDemoKey(key));
+      });
+      return true;
+    } catch {
       return false;
     }
   },

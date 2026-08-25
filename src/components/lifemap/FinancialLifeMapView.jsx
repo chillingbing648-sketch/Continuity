@@ -80,36 +80,45 @@ export function FinancialLifeMapView() {
             <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", marginBottom: 8 }}>
               Level 1 — Trusted Network & Trustees
             </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-              {people.map((p) => (
-                <div
-                  key={p.id}
-                  className="card card-clickable"
-                  onClick={() => openModal("editPerson", { person: p })}
-                  style={{
-                    padding: "10px 16px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    borderRadius: "var(--radius-sm)",
-                    background: p.isPrimaryTrustee ? "var(--accent-light)" : "var(--surface)",
-                    borderColor: p.isPrimaryTrustee ? "var(--accent)" : "var(--border)",
-                  }}
-                >
-                  <div className="avatar" style={{ width: 28, height: 28, fontSize: "0.72rem" }}>
-                    {p.avatar || "P"}
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)" }}>
-                      {p.name}
+            {people.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "10px", color: "var(--text-muted)", fontSize: "0.82rem" }}>
+                No trusted persons designated yet.{" "}
+                <button type="button" className="btn btn-ghost btn-sm" style={{ color: "var(--accent)" }} onClick={() => openModal("addPerson")}>
+                  + Add Trustee
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+                {people.map((p) => (
+                  <div
+                    key={p.id}
+                    className="card card-clickable"
+                    onClick={() => openModal("editPerson", { person: p })}
+                    style={{
+                      padding: "10px 16px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      borderRadius: "var(--radius-sm)",
+                      background: p.isPrimaryTrustee ? "var(--accent-light)" : "var(--surface)",
+                      borderColor: p.isPrimaryTrustee ? "var(--accent)" : "var(--border)",
+                    }}
+                  >
+                    <div className="avatar" style={{ width: 28, height: 28, fontSize: "0.72rem" }}>
+                      {p.avatar || "P"}
                     </div>
-                    <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)" }}>
-                      {p.relationship} • {p.role}
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                        {p.name}
+                      </div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+                        {p.relationship} • {p.role}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* CONNECTOR LINE */}
@@ -122,40 +131,47 @@ export function FinancialLifeMapView() {
             <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", marginBottom: 8 }}>
               Level 2 — Financial Assets & Institutions
             </div>
-            <div className="grid-3">
-              {positiveAssets.map((asset) => {
-                const linkedNominee = people.find((p) => p.id === asset.nomineeId || p.name === asset.nominee);
-
-                return (
-                  <div
-                    key={asset.id}
-                    className="card card-clickable"
-                    onClick={() => openModal("assetDetail", { asset })}
-                    style={{
-                      padding: "12px 14px",
-                      background: catBg(asset.type),
-                      border: "1px solid var(--border)",
-                    }}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                      <span style={{ fontSize: "0.7rem", fontWeight: 700, color: catColor(asset.type), textTransform: "uppercase" }}>
-                        {asset.type}
-                      </span>
-                      <strong style={{ fontSize: "0.85rem" }}>{fmt(asset.approxValue)}</strong>
+            {positiveAssets.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "10px", color: "var(--text-muted)", fontSize: "0.82rem" }}>
+                No financial holdings registered yet.{" "}
+                <button type="button" className="btn btn-ghost btn-sm" style={{ color: "var(--accent)" }} onClick={() => openModal("addAsset")}>
+                  + Add Asset
+                </button>
+              </div>
+            ) : (
+              <div className="grid-3">
+                {positiveAssets.map((asset) => {
+                  return (
+                    <div
+                      key={asset.id}
+                      className="card card-clickable"
+                      onClick={() => openModal("assetDetail", { asset })}
+                      style={{
+                        padding: "12px 14px",
+                        background: catBg(asset.type),
+                        border: "1px solid var(--border)",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                        <span style={{ fontSize: "0.7rem", fontWeight: 700, color: catColor(asset.type), textTransform: "uppercase" }}>
+                          {asset.type}
+                        </span>
+                        <strong style={{ fontSize: "0.85rem" }}>{fmt(asset.approxValue)}</strong>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                        {asset.name}
+                      </div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 2 }}>
+                        Institution: {asset.institution}
+                      </div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: 6, borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 4 }}>
+                        Nominee: <strong>{asset.nominee || "Unassigned"}</strong> ({asset.nomineeVerified ? "✓ Verified" : "⚠ Pending"})
+                      </div>
                     </div>
-                    <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)" }}>
-                      {asset.name}
-                    </div>
-                    <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 2 }}>
-                      Institution: {asset.institution}
-                    </div>
-                    <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: 6, borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 4 }}>
-                      Nominee: <strong>{asset.nominee || "Unassigned"}</strong> ({asset.nomineeVerified ? "✓ Verified" : "⚠ Pending"})
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* CONNECTOR LINE */}
@@ -175,13 +191,56 @@ export function FinancialLifeMapView() {
                   <Icons.dollar size={16} />
                   Debts & Auto-Debit Dependents
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {obligations.map((obl) => {
-                    const sourceBank = assets.find((a) => a.id === obl.paymentSourceAssetId);
+                {obligations.length === 0 ? (
+                  <div style={{ color: "var(--text-muted)", fontSize: "0.8rem", padding: "8px 0" }}>
+                    No recurring obligations or debts registered.
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {obligations.map((obl) => {
+                      const sourceBank = assets.find((a) => a.id === obl.paymentSourceAssetId);
 
-                    return (
+                      return (
+                        <div
+                          key={obl.id}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "0.8rem",
+                            padding: "6px 10px",
+                            borderRadius: 6,
+                            background: "var(--surface-alt)",
+                          }}
+                        >
+                          <div>
+                            <strong>{obl.title}</strong>
+                            <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
+                              Debits from: {sourceBank ? sourceBank.name : "Unlinked"}
+                            </div>
+                          </div>
+                          <strong style={{ color: "var(--error)" }}>{fmt(obl.amount)}</strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* VAULTED DOCUMENTS */}
+              <div className="card" style={{ padding: "14px 16px" }}>
+                <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--accent)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <Icons.docs size={16} />
+                  Verified Evidence Vault
+                </div>
+                {documents.length === 0 ? (
+                  <div style={{ color: "var(--text-muted)", fontSize: "0.8rem", padding: "8px 0" }}>
+                    No documents uploaded to vault yet.
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {documents.slice(0, 4).map((d) => (
                       <div
-                        key={obl.id}
+                        key={d.id}
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
@@ -192,49 +251,18 @@ export function FinancialLifeMapView() {
                         }}
                       >
                         <div>
-                          <strong>{obl.title}</strong>
+                          <strong>{d.title}</strong>
                           <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                            Debits from: {sourceBank ? sourceBank.name : "Unlinked"}
+                            Type: {d.docType}
                           </div>
                         </div>
-                        <strong style={{ color: "var(--error)" }}>{fmt(obl.amount)}</strong>
+                        <span className={`badge ${d.verified ? "badge-success" : "badge-neutral"}`}>
+                          {d.verified ? "Verified" : "Pending"}
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* VAULTED DOCUMENTS */}
-              <div className="card" style={{ padding: "14px 16px" }}>
-                <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--accent)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                  <Icons.docs size={16} />
-                  Verified Evidence Vault
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {documents.slice(0, 4).map((d) => (
-                    <div
-                      key={d.id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontSize: "0.8rem",
-                        padding: "6px 10px",
-                        borderRadius: 6,
-                        background: "var(--surface-alt)",
-                      }}
-                    >
-                      <div>
-                        <strong>{d.title}</strong>
-                        <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                          Type: {d.docType}
-                        </div>
-                      </div>
-                      <span className={`badge ${d.verified ? "badge-success" : "badge-neutral"}`}>
-                        {d.verified ? "Verified" : "Pending"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -250,37 +278,43 @@ export function FinancialLifeMapView() {
           </div>
         </div>
 
-        <div className="grid-2">
-          {financialDependencies.map((dep) => (
-            <div
-              key={dep.bankAccount.id}
-              style={{
-                padding: "12px 16px",
-                borderRadius: "var(--radius-sm)",
-                background: "var(--surface-alt)",
-                border: "1px solid var(--border-light)",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <strong style={{ fontSize: "0.9rem", color: "var(--text-primary)" }}>
-                  {dep.bankAccount.name}
-                </strong>
-                <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>
-                  {fmt(dep.bankAccount.approxValue)}
-                </span>
-              </div>
+        {financialDependencies.length === 0 ? (
+          <div style={{ padding: "16px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            Add liquid bank accounts and recurring obligations to analyze auto-debit runway and payment dependencies.
+          </div>
+        ) : (
+          <div className="grid-2">
+            {financialDependencies.map((dep) => (
+              <div
+                key={dep.bankAccount.id}
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--surface-alt)",
+                  border: "1px solid var(--border-light)",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <strong style={{ fontSize: "0.9rem", color: "var(--text-primary)" }}>
+                    {dep.bankAccount.name}
+                  </strong>
+                  <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>
+                    {fmt(dep.bankAccount.approxValue)}
+                  </span>
+                </div>
 
-              <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: 4 }}>
-                Supports <strong>{dep.obligationCount} financial obligations</strong> totaling{" "}
-                <strong>{fmt(dep.monthlyBurden)} / mo</strong>.
-              </div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: 4 }}>
+                  Supports <strong>{dep.obligationCount} financial obligations</strong> totaling{" "}
+                  <strong>{fmt(dep.monthlyBurden)} / mo</strong>.
+                </div>
 
-              <div style={{ fontSize: "0.75rem", color: "var(--accent)", fontWeight: 600, marginTop: 4 }}>
-                Estimated liquidity runway: {dep.runwayMonths} months
+                <div style={{ fontSize: "0.75rem", color: "var(--accent)", fontWeight: 600, marginTop: 4 }}>
+                  Estimated liquidity runway: {dep.runwayMonths} months
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,26 +4,38 @@ import { useApp } from "../../context/AppContext";
 import { useAuth } from "../../context/AuthContext";
 
 export function Sidebar({ currentTab, onNav }) {
-  const { criticalGaps, openModal, setCommandPaletteOpen, setAiAssistantOpen } = useApp();
+  const {
+    criticalGaps,
+    openModal,
+    setCommandPaletteOpen,
+    setAiAssistantOpen,
+    isDemoMode,
+    enterDemoMode,
+    exitDemoMode,
+    user,
+  } = useApp();
   const { user: authUser, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const displayName =
+    user?.name ||
     authUser?.user_metadata?.full_name ||
     authUser?.email?.split("@")[0] ||
-    "Harsh Dubey";
+    "Account Owner";
 
-  const displayEmail = authUser?.email || "harshdubey.works@gmail.com";
+  const displayEmail = authUser?.email || user?.email || "owner@example.com";
 
-  const userInitials = displayName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) || "HD";
+  const userInitials =
+    displayName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "CO";
 
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: <Icons.home size={18} /> },
+    { id: "library", label: "Library / Playbook", icon: <Icons.guide size={18} /> },
     { id: "assets", label: "Assets & Liabilities", icon: <Icons.bank size={18} /> },
     { id: "lifemap", label: "Financial Life Map", icon: <Icons.lifeMap size={18} /> },
     { id: "people", label: "Trusted Persons", icon: <Icons.people size={18} /> },
@@ -66,11 +78,42 @@ export function Sidebar({ currentTab, onNav }) {
         </div>
       </div>
 
+      {/* DEMO MODE SIDEBAR BANNER */}
+      {isDemoMode && (
+        <div
+          style={{
+            margin: "0 12px 10px",
+            padding: "8px 10px",
+            background: "#FFF3CD",
+            border: "1px solid #FFEEBA",
+            borderRadius: "var(--radius-sm)",
+            fontSize: "0.75rem",
+            color: "#856404",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 700 }}>
+            <Icons.alertTriangle size={14} style={{ color: "#856404" }} />
+            <span>DEMO MODE ACTIVE</span>
+          </div>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            style={{ width: "100%", padding: "4px 8px", fontSize: "0.72rem", background: "white", color: "var(--accent)" }}
+            onClick={exitDemoMode}
+          >
+            Exit Demo Mode
+          </button>
+        </div>
+      )}
+
       <div className="sidebar-nav">
         <button
           type="button"
           className="btn btn-primary btn-sm"
-          style={{ width: "100%", marginBottom: 12, justifyContent: "center" }}
+          style={{ width: "100%", marginBottom: 8, justifyContent: "center" }}
           onClick={() => openModal("quickAdd")}
         >
           <Icons.plus size={16} />
@@ -109,7 +152,34 @@ export function Sidebar({ currentTab, onNav }) {
           </button>
         ))}
 
-        <div className="sidebar-section-title">Intelligence</div>
+        <div className="sidebar-section-title">Workspace & AI</div>
+        {!isDemoMode ? (
+          <button
+            type="button"
+            className="nav-item"
+            onClick={() => {
+              setShowUserMenu(false);
+              enterDemoMode();
+            }}
+          >
+            <Icons.sparkles size={18} style={{ color: "var(--warn)" }} />
+            <span>Explore Demo Mode</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="nav-item"
+            style={{ color: "var(--accent)", fontWeight: 600 }}
+            onClick={() => {
+              setShowUserMenu(false);
+              exitDemoMode();
+            }}
+          >
+            <Icons.user size={18} />
+            <span>Exit Demo Mode</span>
+          </button>
+        )}
+
         <button
           type="button"
           className="nav-item"
@@ -146,14 +216,32 @@ export function Sidebar({ currentTab, onNav }) {
               <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", wordBreak: "break-all" }}>
                 {displayEmail}
               </div>
-              <div style={{ marginTop: 6 }}>
+              <div style={{ marginTop: 6, display: "flex", gap: 6 }}>
                 <span className="badge badge-success" style={{ fontSize: "0.68rem" }}>
                   Supabase Verified
                 </span>
+                {isDemoMode && (
+                  <span className="badge badge-warn" style={{ fontSize: "0.68rem" }}>
+                    Demo Mode
+                  </span>
+                )}
               </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 6 }}>
+              <button
+                type="button"
+                className="nav-item"
+                style={{ padding: "7px 8px", fontSize: "0.8rem" }}
+                onClick={() => {
+                  setShowUserMenu(false);
+                  onNav("library");
+                }}
+              >
+                <Icons.guide size={15} />
+                <span>Library Playbook</span>
+              </button>
+
               <button
                 type="button"
                 className="nav-item"
