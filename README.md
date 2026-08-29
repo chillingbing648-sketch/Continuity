@@ -1,84 +1,65 @@
-Continuity
-<p align="center"> <strong>Plan Today. Protect Tomorrow.</strong> </p> <p align="center"> A modern personal financial continuity planning application designed to help individuals organize, understand, and prepare for the financial responsibilities that matter when life becomes uncertain. </p> <p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/">Live Demo</a> · <a href="https://github.com/chillingbing648-sketch/Continuity">Repository</a> · <a href="https://github.com/chillingbing648-sketch/Continuity/issues">Issues</a> </p>
-Overview
+🧭 Continuity
+<p align="center"> <img src="https://capsule-render.vercel.app/api?type=waving&color=0f766e,2563eb&height=190&section=header&text=Continuity&fontSize=56&fontColor=ffffff&animation=fadeIn&fontAlignY=38" width="100%" alt="Continuity"> </p> <p align="center"> <strong>Plan Today. Protect Tomorrow.</strong> </p> <p align="center"> A modern personal financial continuity platform designed to organize important information, improve preparedness, and bring clarity to life's unexpected moments. </p> <p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="https://img.shields.io/badge/🚀%20LIVE%20APP-0F766E?style=for-the-badge" alt="Live App"> </a> <a href="https://github.com/chillingbing648-sketch/Continuity"> <img src="https://img.shields.io/badge/💻%20SOURCE-181717?style=for-the-badge&logo=github" alt="Source"> </a> <img src="https://img.shields.io/github/last-commit/chillingbing648-sketch/Continuity?style=for-the-badge&logo=git&label=UPDATED" alt="Last Updated"> </p>
+✨ Preview
+<p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="imag.png" width="96%" alt="Continuity Application Preview"> </a> </p> <p align="center"> <sub>Live application preview · Click the image to open Continuity</sub> </p>
+🎯 The Idea
 
-Continuity is a personal financial continuity planning application built around a simple idea:
+Continuity is built around a simple question:
 
-Financial preparedness should not begin when something goes wrong.
+If something unexpected happened tomorrow, would your important financial information be easy to understand and access?
 
-The application provides a structured environment for organizing financial information, understanding important responsibilities, and building a clearer continuity plan for the future.
+Continuity aims to make that preparation more organized, accessible, and actionable through a focused digital experience.
 
-Rather than treating financial planning as a collection of disconnected documents and spreadsheets, Continuity aims to bring the most important information into one focused, approachable experience.
+Core Focus
 
-Why Continuity?
+💰 Financial Organization · 🧭 Preparedness · 📋 Continuity · 🔐 Responsible Data
 
-Life can change unexpectedly.
-
-A person may suddenly need to understand:
-
-What financial resources exist
-Which obligations need attention
-Where important information is located
-What should happen if the primary decision-maker becomes unavailable
-Which areas of a financial plan still require preparation
-
-Continuity is designed around that problem.
-
-✨ Key Capabilities
-
-Personal Financial Organization
-Structure important financial information in one centralized experience.
-
-Continuity Planning
-Think beyond everyday budgeting and prepare for unexpected situations.
-
-Structured Information Management
-Organize financial data into meaningful categories rather than scattered notes.
-
-Modern Dashboard Experience
-Present important information through a focused and accessible interface.
-
-Responsive Application Architecture
-Built as a modern React application with reusable components and modular services.
-
-Persistent Data Layer
-Supabase integration provides the foundation for application data management.
-
-Web Deployment
-Continuity is publicly accessible through GitHub Pages.
-
-🎯 Project Goals
-
-Continuity is built around five principles:
-
-Principle	Goal
-Clarity	Make financial information easier to understand
-Preparedness	Encourage planning before an emergency occurs
-Organization	Reduce dependency on scattered records
-Accessibility	Keep the experience approachable for everyday users
-Continuity	Ensure important financial responsibilities can be understood beyond the individual managing them
-🛠️ Technology Stack
-Frontend
-React 18
-React DOM
-Vite 5
-JavaScript / JSX
-CSS
-Backend / Data
-Supabase
-@supabase/supabase-js
-Development & Deployment
-Vite
-GitHub Actions
-GitHub Pages
-
-The current project configuration defines development, build, and preview workflows through Vite and includes Supabase as the application's data-layer dependency.
-
+⚡ Highlights
+<table> <tr> <td align="center" width="25%"> <h3>🧠</h3> <b>Clarity</b><br> <sub>Turn scattered information into a structured experience.</sub> </td> <td align="center" width="25%"> <h3>💰</h3> <b>Financial Focus</b><br> <sub>Designed around personal financial continuity.</sub> </td> <td align="center" width="25%"> <h3>⚛️</h3> <b>Modern Stack</b><br> <sub>React + Vite with modular architecture.</sub> </td> <td align="center" width="25%"> <h3>🚀</h3> <b>Deployed</b><br> <sub>Automated GitHub Pages deployment.</sub> </td> </tr> </table>
+🛠️ Technology
+<p align="center"> <img src="https://skillicons.dev/icons?i=react,vite,js,html,css,supabase,git,github&perline=8" alt="Technology Stack"> </p>
+Technology	Purpose
+⚛️ React 18	UI & component architecture
+⚡ Vite 5	Development & production builds
+🟨 JavaScript / JSX	Application logic
+🎨 CSS	Styling & presentation
+🟩 Supabase	Data & backend services
+🔧 Git	Version control
+🐙 GitHub	Repository & collaboration
+⚙️ GitHub Actions	Deployment automation
+🌐 GitHub Pages	Application hosting
+📊 Language Breakdown
+<p align="center"> <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=chillingbing648-sketch&repo=Continuity&layout=donut&theme=transparent&hide_border=true&langs_count=8" width="380" alt="Continuity Language Breakdown" /> </p> <p align="center"> <sub> Automatically generated from the repository's current source composition. </sub> </p>
 🏗️ Architecture
+                         ┌──────────────────────┐
+                         │      CONTINUITY      │
+                         │     React + Vite     │
+                         └──────────┬───────────┘
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+              ▼                     ▼                     ▼
+       ┌────────────┐        ┌────────────┐        ┌────────────┐
+       │ Components │        │  Context   │        │   Styles   │
+       │    UI      │        │   State    │        │    CSS     │
+       └─────┬──────┘        └─────┬──────┘        └────────────┘
+             │                     │
+             └──────────┬──────────┘
+                        ▼
+                 ┌──────────────┐
+                 │   Services   │
+                 │    Utils     │
+                 └──────┬───────┘
+                        │
+                        ▼
+                 ┌──────────────┐
+                 │   Supabase   │
+                 │ Data Layer   │
+                 └──────────────┘
 
-Continuity follows a modular React architecture.
-
+Project Structure
 Continuity/
+│
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml
@@ -95,247 +76,111 @@ Continuity/
 │   ├── App.jsx
 │   └── main.jsx
 │
-├── .gitignore
+├── imag.png
 ├── index.html
 ├── package.json
 ├── package-lock.json
 └── vite.config.js
 
-
-The separation of components, context, services, utils, data, and styling resources is intended to keep UI, application state, business logic, and supporting functionality independently maintainable.
-
-🚀 Getting Started
-Prerequisites
-
-Make sure the following are installed:
-
-Node.js 18+
-npm
-Git
-1. Clone the repository
+🚀 Run Locally
+1 · Clone
 git clone https://github.com/chillingbing648-sketch/Continuity.git
 cd Continuity
 
-2. Install dependencies
+2 · Install
 npm install
 
-3. Start the development server
+3 · Start
 npm run dev
 
-
-The application will be available through the local Vite development server.
-
-4. Create a production build
+4 · Build
 npm run build
 
-5. Preview the production build
+5 · Preview
 npm run preview
 
-🔐 Environment Configuration
+🔐 Environment
 
-If you are running a version that connects to Supabase, configure the required environment variables locally.
+If using the Supabase integration locally, configure your environment in .env.local:
 
-Create:
-
-.env.local
-
-
-Example:
-
-VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 
-Never commit private credentials, service-role keys, passwords, or other secrets to the repository.
+Never commit secrets or private credentials.
 
-For production deployments, environment configuration should be managed through the deployment platform's secret/environment-variable system.
+☁️ Deployment
 
-🌐 Deployment
-GitHub Pages
+Continuity uses a GitHub-based deployment workflow:
 
-The project includes a GitHub Actions deployment workflow under:
+   Developer
+       │
+       ▼
+    Git Push
+       │
+       ▼
+    GitHub
+       │
+       ▼
+ GitHub Actions
+       │
+       ▼
+   Vite Build
+       │
+       ▼
+ GitHub Pages
+       │
+       ▼
+   🌐 LIVE APP
 
-.github/workflows/deploy.yml
+🔗 Live
+<p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="https://img.shields.io/badge/OPEN%20CONTINUITY-2563EB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Open Continuity"> </a> </p>
+📈 Engineering Status
+Area	Status
+React Architecture	🟢
+Component Structure	🟢
+Supabase Integration	🟢
+Production Build	🟢
+GitHub Pages	🟢
+CI/CD Foundation	🟢
+Automated Tests	🟡
+Monitoring	🟡
+Production Security Hardening	🟡
 
+Current stage: MVP / Active Development
 
-The public deployment is available at:
+🗺️ Next
+✓ Core Application
+✓ Modern UI
+✓ Data Integration
+✓ Deployment
 
-https://chillingbing648-sketch.github.io/Continuity/
+→ Testing
+→ Security Hardening
+→ Accessibility
+→ Observability
+→ Advanced Planning Features
 
-Deployment Flow
-Code Push
-   │
-   ▼
-GitHub Repository
-   │
-   ▼
-GitHub Actions
-   │
-   ├── Install dependencies
-   ├── Build application
-   └── Deploy
-          │
-          ▼
-     GitHub Pages
-
-
-This provides an automated path from repository changes to the deployed application.
-
-🧪 Development Standards
-
-For production-oriented development, the project should follow these practices:
-
-Keep reusable UI inside components/
-Keep application-wide state inside context/
-Keep external/data operations inside services/
-Keep pure helper logic inside utils/
-Avoid hard-coded secrets
-Validate user-provided data
-Keep business logic separate from presentation
-Prefer small, reusable React components
-Run a production build before deployment
-🔒 Security & Privacy
-
-Continuity deals with a potentially sensitive domain: personal financial information.
-
-That means security should be treated as a core product requirement rather than an optional enhancement.
-
-Important principles
-Never expose secrets in frontend source code.
-Never commit .env files containing sensitive credentials.
-Use appropriate Supabase Row Level Security policies when storing user-specific data.
-Validate and authorize database operations server-side where appropriate.
-Minimize the amount of personally identifiable information collected.
-Avoid storing unnecessary financial credentials or authentication secrets.
-Use HTTPS in production.
-Regularly review dependencies for security vulnerabilities.
-
-Important: Continuity is a financial organization/planning tool and should not be interpreted as professional financial, legal, tax, or investment advice.
-
-📊 Project Status
-
-Current stage: Active prototype / MVP
-
-Continuity has a functional modern frontend architecture, data-layer integration, and public deployment foundation. The repository is structured for continued development and expansion.
-
-Current strengths
-React-based architecture
-Modular source structure
-Supabase integration
-Production build configuration
-Automated deployment workflow
-Public web deployment
-Recommended production hardening
-
-Before positioning Continuity as a fully production-grade financial platform, the following areas should be strengthened:
-
-Automated unit and integration testing
-End-to-end testing
-Authentication and authorization hardening
-Supabase Row Level Security review
-Error monitoring
-Accessibility auditing
-Performance monitoring
-Dependency/security scanning
-Formal privacy policy
-Data retention/deletion strategy
-Backup and recovery strategy
-CI quality gates
-Production observability
-🗺️ Roadmap
-Phase 1 — Foundation
- React application
- Modular component architecture
- Supabase integration
- Production build configuration
- GitHub Actions deployment
- Public GitHub Pages deployment
-Phase 2 — Reliability
- Automated testing
- Form validation
- Error boundaries
- Better loading/error states
- Accessibility audit
- Performance optimization
- Dependency security checks
-Phase 3 — Security
- Robust authentication
- Row Level Security policies
- Secure user-specific data isolation
- Privacy controls
- Account/data deletion workflows
- Security documentation
-Phase 4 — Product Expansion
- More comprehensive financial planning workflows
- Improved dashboards and insights
- Notifications/reminders
- Exportable continuity plans
- Document organization
- Guided preparedness workflows
- Mobile-first refinements
 🤝 Contributing
 
-Contributions, suggestions, and constructive feedback are welcome.
+Contributions and ideas are welcome.
 
-Suggested workflow
-Fork the repository.
-Create a feature branch.
-git checkout -b feature/your-feature
-
-Make your changes.
-Test the application locally.
-Build the project.
+git checkout -b feature/my-feature
+npm install
+npm run dev
 npm run build
-
-Commit your changes.
-git commit -m "feat: add your feature"
-
-Push your branch.
-git push origin feature/your-feature
-
-Open a Pull Request.
-
-Please keep pull requests focused, documented, and consistent with the existing architecture.
-
-🐛 Bug Reports & Feature Requests
-
-If you discover a problem or have an idea for improving Continuity, please open an issue:
-
-https://github.com/chillingbing648-sketch/Continuity/issues
-
-When reporting a bug, include:
-
-What happened
-What you expected to happen
-Steps to reproduce
-Browser/device information
-Relevant screenshots or console errors
-
-Please avoid posting private financial information or other sensitive personal data in issues.
-
-📄 License
-
-If this project is intended to be publicly reusable, add an explicit open-source license to the repository.
-
-For example:
-
-MIT License
+git commit -m "feat: describe change"
+git push origin feature/my-feature
 
 
-Until a license is formally added to the repository, users should not assume that the source code is freely licensed for redistribution or commercial use.
+Then open a Pull Request.
 
-👤 Author
+⚠️ Disclaimer
 
-chillingbing648-sketch
+Continuity is a financial organization and planning software project.
 
-Continuity is an independently developed project focused on exploring how modern web applications can make personal financial preparedness more structured, accessible, and actionable.
+It does not provide financial, investment, legal, insurance, or tax advice.
 
 🔗 Links
-Live Application: https://chillingbing648-sketch.github.io/Continuity/
-GitHub Repository: https://github.com/chillingbing648-sketch/Continuity
-Issue Tracker: https://github.com/chillingbing648-sketch/Continuity/issues
-⭐ Support the Project
-
-If Continuity is useful, interesting, or helpful for your own exploration of financial preparedness and modern web development, consider giving the repository a ⭐ on GitHub.
-
-<p align="center"> <strong>Continuity</strong><br> Plan today. Protect tomorrow. </p>
+<p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> 🌐 <b>Live Application</b> </a> &nbsp;&nbsp;•&nbsp;&nbsp; <a href="https://github.com/chillingbing648-sketch/Continuity"> 💻 <b>GitHub</b> </a> &nbsp;&nbsp;•&nbsp;&nbsp; <a href="https://github.com/chillingbing648-sketch/Continuity/issues"> 🐛 <b>Issues</b> </a> </p>
+<p align="center"> <img src="https://capsule-render.vercel.app/api?type=waving&color=2563eb,0f766e&height=120&section=footer" width="100%" alt="Continuity"> </p> <p align="center"> <strong>Continuity</strong><br> <sub>Plan Today. Protect Tomorrow.</sub> </p>
