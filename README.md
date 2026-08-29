@@ -1,7 +1,7 @@
 🧭 Continuity
 <p align="center"> <img src="https://capsule-render.vercel.app/api?type=waving&color=0f766e,2563eb&height=190&section=header&text=Continuity&fontSize=56&fontColor=ffffff&animation=fadeIn&fontAlignY=38" width="100%" alt="Continuity"> </p> <p align="center"> <strong>Plan Today. Protect Tomorrow.</strong> </p> <p align="center"> A modern personal financial continuity platform designed to organize important information, improve preparedness, and bring clarity to life's unexpected moments. </p> <p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="https://img.shields.io/badge/🚀%20LIVE%20APP-0F766E?style=for-the-badge" alt="Live App"> </a> <a href="https://github.com/chillingbing648-sketch/Continuity"> <img src="https://img.shields.io/badge/💻%20SOURCE-181717?style=for-the-badge&logo=github" alt="Source"> </a> <img src="https://img.shields.io/github/last-commit/chillingbing648-sketch/Continuity?style=for-the-badge&logo=git&label=UPDATED" alt="Last Updated"> </p>
 ✨ Preview
-<p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="imag.png" width="96%" alt="Continuity Application Preview"> </a> </p> <p align="center"> <sub>Live application preview · Click the image to open Continuity</sub> </p>
+<p align="center"> <a href="https://chillingbing648-sketch.github.io/Continuity/"> <img src="image.png" width="96%" alt="Continuity Application Preview"> </a> </p> <p align="center"> <sub>Live application preview · Click the image to open Continuity</sub> </p>
 🎯 The Idea
 
 Continuity is built around a simple question:
