@@ -1,95 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
-  <title id="title">Continuity — Code & Technology Stack</title>
-  <desc id="desc">A premium visual showing Continuity's source languages and technology stack.</desc>
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7FAFC"/><stop offset="0.52" stop-color="#EEF6F5"/><stop offset="1" stop-color="#F2EEFF"/></linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0F766E"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
-    <linearGradient id="accent2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#334155" flood-opacity=".12"/></filter>
-  </defs>
+# 🧭 Continuity
 
-  <rect x="14" y="14" width="1572" height="672" rx="34" fill="url(#bg)"/>
-  <rect x="14" y="14" width="1572" height="672" rx="34" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+<p align="center">
+  <img
+    src="./assets/continuity-tech-stack.svg"
+    width="100%"
+    alt="Continuity — Code & Technology Stack"
+  />
+</p>
 
-  <text x="70" y="72" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1E293B">Continuity</text>
-  <text x="70" y="108" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" letter-spacing="2.5" fill="#0F766E">CODE &amp; TECHNOLOGY STACK</text>
-  <text x="70" y="138" font-family="Inter, Arial, sans-serif" font-size="14" fill="#64748B">A compact view of the technologies powering the financial continuity workspace.</text>
+<p align="center">
+  <strong>Plan Today. Protect Tomorrow.</strong>
+</p>
 
-  <g filter="url(#shadow)">
-    <rect x="70" y="178" width="680" height="440" rx="26" fill="#FFFFFF" fill-opacity=".92"/>
-    <rect x="782" y="178" width="748" height="440" rx="26" fill="#FFFFFF" fill-opacity=".92"/>
-  </g>
+<p align="center">
+  A modern personal financial continuity platform for organizing
+  assets, people, documents, obligations, and preparedness into one
+  focused workspace.
+</p>
 
-  <text x="108" y="226" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="750" fill="#1E293B">Repository language view</text>
-  <text x="108" y="254" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748B">GitHub Linguist classifies source by language; this panel intentionally avoids hard-coded percentages.</text>
+<p align="center">
+  <a href="https://chillingbing648-sketch.github.io/Continuity/">
+    <img
+      src="https://img.shields.io/badge/🚀%20LIVE%20APP-0F766E?style=for-the-badge"
+      alt="Live Application"
+    />
+  </a>
 
-  <g transform="translate(108 292)">
-    <circle cx="18" cy="18" r="8" fill="#F7DF1E"/>
-    <text x="42" y="24" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">JavaScript / JSX</text>
-    <rect x="235" y="7" width="340" height="22" rx="11" fill="#E2E8F0"/>
-    <rect x="235" y="7" width="285" height="22" rx="11" fill="url(#accent)"/>
-    <text x="595" y="24" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F766E">Core UI + application logic</text>
+  <a href="https://github.com/chillingbing648-sketch/Continuity">
+    <img
+      src="https://img.shields.io/badge/💻%20SOURCE-181717?style=for-the-badge&logo=github"
+      alt="Source Code"
+    />
+  </a>
 
-    <circle cx="18" cy="78" r="8" fill="#264DE4"/>
-    <text x="42" y="84" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">CSS</text>
-    <rect x="235" y="67" width="340" height="22" rx="11" fill="#E2E8F0"/>
-    <rect x="235" y="67" width="150" height="22" rx="11" fill="#2563EB"/>
-    <text x="595" y="84" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#2563EB">Design system + responsive UI</text>
+  <a href="https://github.com/chillingbing648-sketch/Continuity/issues">
+    <img
+      src="https://img.shields.io/badge/🐛%20ISSUES-F97316?style=for-the-badge&logo=github"
+      alt="Issues"
+    />
+  </a>
+</p>
 
-    <circle cx="18" cy="138" r="8" fill="#E34F26"/>
-    <text x="42" y="144" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">HTML</text>
-    <rect x="235" y="127" width="340" height="22" rx="11" fill="#E2E8F0"/>
-    <rect x="235" y="127" width="72" height="22" rx="11" fill="#7C3AED"/>
-    <text x="595" y="144" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#7C3AED">Application shell + metadata</text>
+---
 
-    <text x="0" y="216" font-family="Inter, Arial, sans-serif" font-size="12" fill="#94A3B8">Visual scale is illustrative; use GitHub's current repository language stats for exact percentages.</text>
-  </g>
+## ✨ Preview
 
-  <text x="820" y="226" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="750" fill="#1E293B">Technology stack</text>
-  <text x="820" y="254" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748B">Verified against the project configuration and source structure.</text>
+<p align="center">
+  <a href="https://chillingbing648-sketch.github.io/Continuity/">
+    <img
+      src="./image.png"
+      width="96%"
+      alt="Continuity Application Preview"
+    />
+  </a>
+</p>
 
-  <g transform="translate(820 286)">
-    <g>
-      <rect width="202" height="82" rx="18" fill="#F0F9FF"/>
-      <text x="18" y="34" font-size="26">⚛</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">React 18</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">UI architecture</text>
-    </g>
-    <g transform="translate(220 0)">
-      <rect width="202" height="82" rx="18" fill="#EEF2FF"/>
-      <text x="18" y="34" font-size="26">⚡</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">Vite 5</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Build tooling</text>
-    </g>
-    <g transform="translate(440 0)">
-      <rect width="202" height="82" rx="18" fill="#ECFDF5"/>
-      <text x="18" y="34" font-size="26">▣</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">Supabase</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Auth + backend</text>
-    </g>
+<p align="center">
+  <sub>Click the preview to open the live application.</sub>
+</p>
 
-    <g transform="translate(0 104)">
-      <rect width="202" height="82" rx="18" fill="#F5F3FF"/>
-      <text x="18" y="34" font-size="26">⌘</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">Context API</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Shared app state</text>
-    </g>
-    <g transform="translate(220 104)">
-      <rect width="202" height="82" rx="18" fill="#F0FDFA"/>
-      <text x="18" y="34" font-size="26">↯</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">JSX + CSS</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Product interface</text>
-    </g>
-    <g transform="translate(440 104)">
-      <rect width="202" height="82" rx="18" fill="#FFF7ED"/>
-      <text x="18" y="34" font-size="26">⚙</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">GitHub Actions</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">CI/CD automation</text>
-    </g>
+---
 
-    <g transform="translate(0 208)">
-      <rect width="202" height="82" rx="18" fill="#F8FAFC"/>
-      <text x="18" y="34" font-size="26">▣</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">Git</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Version control</text>
-    </g>
-    <g transform="translate(220 208)">
-      <rect width="202" height="82" rx="18" fill="#F8FAFC"/>
-      <text x="18" y="34" font-size="26">◉</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">GitHub Pages</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Hosting</text>
-    </g>
-    <g transform="translate(440 208)">
-      <rect width="202" height="82" rx="18" fill="#FAF5FF"/>
-      <text x="18" y="34" font-size="26">⌕</text><text x="58" y="32" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="750" fill="#0F172A">Command + Search</text><text x="58" y="56" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748B">Product navigation</text>
-    </g>
-  </g>
+## 🎯 What is Continuity?
 
-  <rect x="108" y="554" width="1390" height="1" fill="#E2E8F0"/>
-  <text x="108" y="587" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748B">Stack focus: product UX · continuity intelligence · secure account flows · deployable frontend architecture</text>
-  <text x="108" y="612" font-family="Inter, Arial, sans-serif" font-size="12" fill="#94A3B8">Continuity currently uses React 18, Vite 5 and Supabase in its checked-in project configuration.</text>
-</svg>
+Continuity is built around a simple question:
+
+> **If something unexpected happened tomorrow, would your important financial information be easy to understand and access?**
+
+The platform brings the pieces of financial continuity together into a single workspace so users can:
+
+**organize → verify → prepare → act**
+
+rather than keep critical information scattered across documents, accounts, notes, and people.
+
+### Core focus
+
+**💰 Financial organization · 👥 Trusted access · 📄 Evidence · 🧭 Preparedness · 🛡️ Continuity**
+
+---
+
+# ⚡ Product Experience
+
+Continuity is organized around a small number of high-value workflows rather than disconnected utilities.
+
+| Product Area | Purpose |
+|---|---|
+| 🏠 **Command Center** | Central view of continuity health, priorities, deadlines, and next actions |
+| 💰 **Assets & Liabilities** | Track financial accounts, property, investments, debts, nominees, and ownership context |
+| 👥 **Trusted Persons** | Manage trustees, beneficiaries, emergency contacts, and responsibility relationships |
+| 📄 **Document Vault** | Organize important documents and connect them with relevant financial records |
+| 📅 **Financial Calendar** | Surface recurring obligations, payment dates, and upcoming deadlines |
+| 🗺️ **Financial Life Map** | Connect people, assets, obligations, and financial relationships |
+| 🛡️ **Continuity Protocols** | Configure check-ins, readiness workflows, simulations, and drills |
+| 🤖 **Continuity AI** | Contextual assistance inside the workspace |
+| 🔎 **Global Search & Command** | Find information and trigger actions quickly |
+| 🧾 **Audit Timeline** | Review meaningful workspace activity and changes |
+
+The main application shell routes users between these views through a shared React context and authenticated application state. 
+
+---
+
+# 🧠 Continuity Intelligence
+
+The platform does more than display financial records.
+
+It evaluates the workspace against a deterministic readiness model.
+
+### Continuity Score
+
+The current scoring engine evaluates multiple dimensions including:
+
+```text
+Asset Coverage
+Nominee Coverage
+Nominee Verification
+Document Coverage
+Trusted Person Readiness
+Continuity Instructions
+Liability Coverage
+Insurance Coverage
+Verification Freshness
+Check-in Reliability
