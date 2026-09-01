@@ -1,7 +1,7 @@
 🧭 Continuity
 
 <p align="center">
-  <img src="./assets/continuity-overview.svg" width="100%" alt="Continuity product and technology overview" />
+  <img src="./assets/continuity-minimal-overview.svg" width="100%" alt="Continuity product and technology overview" />
 </p>
 
 <p align="center"><strong>Plan Today. Protect Tomorrow.</strong></p>
@@ -91,6 +91,7 @@ Continuity/
 │   └── workflows/
 │       └── deploy.yml
 ├── assets/
+│   ├── continuity-minimal-overview.svg
 │   ├── continuity-overview.svg
 │   └── continuity-tech-stack.svg
 ├── src/
