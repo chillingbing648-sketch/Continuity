@@ -1,7 +1,7 @@
 🧭 Continuity
 
 <p align="center">
-  <img src="./assets/continuity-tech-stack.svg" width="100%" alt="Continuity code and technology stack" />
+  <img src="./assets/continuity-overview.svg" width="100%" alt="Continuity product and technology overview" />
 </p>
 
 <p align="center"><strong>Plan Today. Protect Tomorrow.</strong></p>
@@ -46,9 +46,7 @@ The product turns scattered financial and preparedness information into a struct
 
 ## 🛠️ Code & Technology Stack
 
-<p align="center">
-  <img src="./assets/continuity-tech-stack.svg" width="100%" alt="Continuity language breakdown and technology stack">
-</p>
+The visual above is a lightweight, repository-local overview designed around Continuity's light product UI rather than a generic AI-generated dashboard.
 
 ### Core stack
 
@@ -93,6 +91,7 @@ Continuity/
 │   └── workflows/
 │       └── deploy.yml
 ├── assets/
+│   ├── continuity-overview.svg
 │   └── continuity-tech-stack.svg
 ├── src/
 │   ├── components/
