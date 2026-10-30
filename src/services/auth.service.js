@@ -1,296 +1,207 @@
-import { supabase } from '../lib/supabase'
-
-/**
- * Parses rate-limit specific information from Supabase errors
- */
-export function parseRateLimitInfo(error) {
-  if (!error) return { isRateLimit: false, retryAfter: 0, message: null }
-
-  const status = error.status
-  const code = (error.code || '').toLowerCase()
-  const rawMsg = (error.message || '').toLowerCase()
-
-  const isRateLimit =
-    status === 429 ||
-    code.includes('rate_limit') ||
-    code.includes('over_request_rate_limit') ||
-    code.includes('over_email_send_rate_limit') ||
-    rawMsg.includes('rate limit') ||
-    rawMsg.includes('too many requests') ||
-    rawMsg.includes('over_request_rate_limit') ||
-    rawMsg.includes('over_email_send_rate_limit') ||
-    rawMsg.includes('for security purposes') ||
-    rawMsg.includes('once every')
-
-  if (!isRateLimit) {
-    return { isRateLimit: false, retryAfter: 0, message: null }
-  }
-
-  // Extract seconds if specified in error message (e.g. "once every 60 seconds")
-  const secMatch = error.message && error.message.match(/(\d+)\s*(?:seconds|sec|s\b)/i)
-  const retryAfter = secMatch ? parseInt(secMatch[1], 10) : 60
-
-  let message = 'Rate limit reached: Too many requests. Please wait a moment before trying again.'
-  if (rawMsg.includes('email') || code.includes('email') || rawMsg.includes('security purposes')) {
-    message = `For security purposes, email requests are rate-limited. Please wait ${retryAfter} seconds before requesting again.`
-  } else {
-    message = `Too many attempts. For security purposes, please wait ${retryAfter} seconds before trying again.`
-  }
-
-  return { isRateLimit: true, retryAfter, message }
-}
-
-/**
- * Human-readable error translator for Supabase Auth errors
- */
-export function getReadableAuthError(error) {
-  if (!error) return 'An unexpected error occurred. Please try again.'
-
-  // Check rate limit first
-  const rateLimitInfo = parseRateLimitInfo(error)
-  if (rateLimitInfo.isRateLimit) {
-    return rateLimitInfo.message
-  }
-
-  const message = (error.message || '').toLowerCase()
-  const status = error.status
-
-  if (
-    message.includes('missing supabase url') ||
-    message.includes('missing env') ||
-    message.includes('invalid api key') ||
-    message.includes('api key') ||
-    message.includes('project not found') ||
-    message.includes('invalid supabase url') ||
-    message.includes('not a valid url')
-  ) {
-    return 'Supabase configuration error. Please verify the app credentials in the environment settings.'
-  }
-
-  if (message.includes('invalid login credentials') || message.includes('invalid_grant')) {
-    return 'Incorrect email or password.'
-  }
-
-  if (message.includes('user already registered') || message.includes('already registered')) {
-    return 'An account with this email address already exists. Please log in instead.'
-  }
-
-  if (message.includes('password should be at least') || message.includes('weak password')) {
-    return 'Password is too weak. Please use at least 6 characters.'
-  }
-
-  if (message.includes('email not confirmed')) {
-    return 'Please check your email and confirm your account before signing in.'
-  }
-
-  if (message.includes('network') || message.includes('fetch') || message.includes('failed to fetch')) {
-    return 'Network connection issue. Please check your internet connection and try again.'
-  }
-
-  if (message.includes('invalid email') || message.includes('unable to validate email')) {
-    return 'Please enter a valid email address.'
-  }
-
-  return error.message || 'Authentication failed. Please try again.'
-}
-
-// In-flight mutex tracker to prevent duplicate concurrent network requests at service layer
+const USERS_KEY = 'continuity_local_users_v1'
+const SESSION_KEY = 'continuity_local_session_v1'
+const COOKIE_NAME = 'continuity_session'
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30
+const listeners = new Set()
 const inFlightRequests = new Set()
 
+const normalizeEmail = (email) => String(email || '').trim().toLowerCase()
+const makeError = (message) => ({ message })
+
+function readJson(key, fallback) {
+  try {
+    const value = localStorage.getItem(key)
+    return value ? JSON.parse(value) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+function writeJson(key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
+}
+
+function readCookie(name) {
+  if (typeof document === 'undefined') return null
+  const prefix = name + '='
+  const item = document.cookie.split('; ').find((part) => part.startsWith(prefix))
+  return item ? decodeURIComponent(item.slice(prefix.length)) : null
+}
+
+function writeSessionCookie(token) {
+  if (typeof document === 'undefined') return
+  const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+  document.cookie = token
+    ? `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=${SESSION_TTL_SECONDS}; SameSite=Lax${secure}`
+    : `${COOKIE_NAME}=; Path=/; Max-Age=0; SameSite=Lax`
+}
+
+function emitAuthChange(event, session) {
+  listeners.forEach((callback) => {
+    try { callback(event, session) } catch (error) { console.error('[LocalAuth] listener failed', error) }
+  })
+}
+
+function publicUser(record) {
+  return record ? {
+    id: record.id,
+    email: record.email,
+    user_metadata: record.metadata || {},
+    created_at: record.createdAt,
+  } : null
+}
+
+function currentSession() {
+  const session = readJson(SESSION_KEY, null)
+  const cookieToken = readCookie(COOKIE_NAME)
+  if (!session || !cookieToken || cookieToken !== session.access_token || session.expires_at <= Math.floor(Date.now() / 1000)) {
+    if (session) {
+      localStorage.removeItem(SESSION_KEY)
+      writeSessionCookie(null)
+    }
+    return null
+  }
+  const users = readJson(USERS_KEY, [])
+  const record = users.find((item) => item.id === session.user?.id)
+  if (!record) {
+    localStorage.removeItem(SESSION_KEY)
+    writeSessionCookie(null)
+    return null
+  }
+  return { ...session, user: publicUser(record) }
+}
+
+function saveSession(record) {
+  const token = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  const session = {
+    access_token: token,
+    token_type: 'bearer',
+    expires_at: Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS,
+    user: publicUser(record),
+  }
+  writeJson(SESSION_KEY, session)
+  writeSessionCookie(token)
+  emitAuthChange('SIGNED_IN', session)
+  return session
+}
+
+async function derivePassword(password, salt) {
+  if (!globalThis.crypto?.subtle) throw new Error('Secure browser cryptography is unavailable. Use HTTPS or localhost.')
+  const encoder = new TextEncoder()
+  const key = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits'])
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: encoder.encode(salt), iterations: 210000, hash: 'SHA-256' },
+    key,
+    256,
+  )
+  return Array.from(new Uint8Array(bits), (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
+function resultError(message) {
+  const error = makeError(message)
+  return { data: null, error, readableMessage: message, isRateLimit: false, retryAfter: 0 }
+}
+
 export const authService = {
-  /**
-   * Sign up a new user with email, password, and optional user metadata (e.g. full_name)
-   */
   async signUp(email, password, metadata = {}) {
-    const key = `signup:${email.trim().toLowerCase()}`
-    if (inFlightRequests.has(key)) {
-      return {
-        data: null,
-        error: { message: 'A signup request is already in progress.' },
-        readableMessage: 'A signup request is currently processing. Please wait.',
-        isRateLimit: false,
-        retryAfter: 0,
-      }
-    }
-
+    const normalizedEmail = normalizeEmail(email)
+    const key = `signup:${normalizedEmail}`
+    if (inFlightRequests.has(key)) return resultError('A signup request is already processing. Please wait.')
     inFlightRequests.add(key)
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
-        options: {
-          data: metadata,
-        },
-      })
-      if (error) throw error
-      return { data, error: null, isRateLimit: false, retryAfter: 0 }
-    } catch (err) {
-      const rateLimitInfo = parseRateLimitInfo(err)
-      return {
-        data: null,
-        error: err,
-        readableMessage: getReadableAuthError(err),
-        isRateLimit: rateLimitInfo.isRateLimit,
-        retryAfter: rateLimitInfo.retryAfter,
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return resultError('Please enter a valid email address.')
+      if (String(password || '').length < 8) return resultError('Password must contain at least 8 characters.')
+      const users = readJson(USERS_KEY, [])
+      if (users.some((item) => item.email === normalizedEmail)) return resultError('An account with this email address already exists. Please log in instead.')
+      const salt = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
+      const record = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `local-${Date.now()}`,
+        email: normalizedEmail,
+        passwordSalt: salt,
+        passwordHash: await derivePassword(password, salt),
+        metadata,
+        createdAt: new Date().toISOString(),
       }
+      users.push(record)
+      writeJson(USERS_KEY, users)
+      const session = saveSession(record)
+      return { data: { user: session.user, session }, error: null, isRateLimit: false, retryAfter: 0 }
+    } catch (error) {
+      return resultError(error.message || 'Could not create the local account.')
     } finally {
       inFlightRequests.delete(key)
     }
   },
 
-  /**
-   * Sign in with email and password
-   */
   async signIn(email, password) {
-    const key = `signin:${email.trim().toLowerCase()}`
-    if (inFlightRequests.has(key)) {
-      return {
-        data: null,
-        error: { message: 'A signin request is already in progress.' },
-        readableMessage: 'A signin request is currently processing. Please wait.',
-        isRateLimit: false,
-        retryAfter: 0,
-      }
-    }
-
+    const normalizedEmail = normalizeEmail(email)
+    const key = `signin:${normalizedEmail}`
+    if (inFlightRequests.has(key)) return resultError('A sign-in request is already processing. Please wait.')
     inFlightRequests.add(key)
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      })
-      if (error) throw error
-      return { data, error: null, isRateLimit: false, retryAfter: 0 }
-    } catch (err) {
-      const rateLimitInfo = parseRateLimitInfo(err)
-      return {
-        data: null,
-        error: err,
-        readableMessage: getReadableAuthError(err),
-        isRateLimit: rateLimitInfo.isRateLimit,
-        retryAfter: rateLimitInfo.retryAfter,
-      }
+      const users = readJson(USERS_KEY, [])
+      const record = users.find((item) => item.email === normalizedEmail)
+      if (!record) return resultError('Incorrect email or password.')
+      const hash = await derivePassword(password, record.passwordSalt)
+      if (hash !== record.passwordHash) return resultError('Incorrect email or password.')
+      const session = saveSession(record)
+      return { data: { user: session.user, session }, error: null, isRateLimit: false, retryAfter: 0 }
+    } catch (error) {
+      return resultError(error.message || 'Could not sign in.')
     } finally {
       inFlightRequests.delete(key)
     }
   },
 
-  /**
-   * Sign out the currently authenticated user
-   */
   async signOut() {
-    try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-      return { error: null }
-    } catch (err) {
-      return { error: err, readableMessage: getReadableAuthError(err) }
-    }
+    localStorage.removeItem(SESSION_KEY)
+    writeSessionCookie(null)
+    emitAuthChange('SIGNED_OUT', null)
+    return { error: null }
   },
 
-  /**
-   * Retrieve active session
-   */
   async getSession() {
-    try {
-      const { data, error } = await supabase.auth.getSession()
-      if (error) throw error
-      return { data, error: null }
-    } catch (err) {
-      return { data: { session: null }, error: err }
-    }
+    const session = currentSession()
+    return { data: { session }, error: null }
   },
 
-  /**
-   * Retrieve current user
-   */
   async getCurrentUser() {
-    try {
-      const { data, error } = await supabase.auth.getUser()
-      if (error) throw error
-      return data?.user || null
-    } catch {
-      return null
-    }
+    return currentSession()?.user || null
   },
 
-  /**
-   * Trigger password reset email
-   */
-  async resetPassword(email, redirectTo) {
-    const key = `reset:${email.trim().toLowerCase()}`
-    if (inFlightRequests.has(key)) {
-      return {
-        data: null,
-        error: { message: 'A password reset request is already in progress.' },
-        readableMessage: 'A password reset request is currently processing. Please wait.',
-        isRateLimit: false,
-        retryAfter: 0,
-      }
-    }
-
-    inFlightRequests.add(key)
-    try {
-      const redirectUrl = redirectTo || (typeof window !== 'undefined' ? window.location.origin : undefined)
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: redirectUrl,
-      })
-      if (error) throw error
-      return { data, error: null, isRateLimit: false, retryAfter: 0 }
-    } catch (err) {
-      const rateLimitInfo = parseRateLimitInfo(err)
-      return {
-        data: null,
-        error: err,
-        readableMessage: getReadableAuthError(err),
-        isRateLimit: rateLimitInfo.isRateLimit,
-        retryAfter: rateLimitInfo.retryAfter,
-      }
-    } finally {
-      inFlightRequests.delete(key)
-    }
+  async resetPassword() {
+    return resultError('Email-based password recovery is unavailable in local-only mode. Sign in and change your password from account settings.')
   },
 
-  /**
-   * Update password for an active session (e.g. after recovery link)
-   */
   async updatePassword(newPassword) {
-    const key = 'update_password'
-    if (inFlightRequests.has(key)) {
-      return {
-        data: null,
-        error: { message: 'Password update already in progress.' },
-        readableMessage: 'Password update is currently processing. Please wait.',
-        isRateLimit: false,
-        retryAfter: 0,
-      }
-    }
-
-    inFlightRequests.add(key)
+    if (String(newPassword || '').length < 8) return resultError('Password must contain at least 8 characters.')
+    const session = currentSession()
+    if (!session) return resultError('Please sign in again before changing your password.')
     try {
-      const { data, error } = await supabase.auth.updateUser({
-        password: newPassword,
-      })
-      if (error) throw error
-      return { data, error: null, isRateLimit: false, retryAfter: 0 }
-    } catch (err) {
-      const rateLimitInfo = parseRateLimitInfo(err)
-      return {
-        data: null,
-        error: err,
-        readableMessage: getReadableAuthError(err),
-        isRateLimit: rateLimitInfo.isRateLimit,
-        retryAfter: rateLimitInfo.retryAfter,
-      }
-    } finally {
-      inFlightRequests.delete(key)
+      const users = readJson(USERS_KEY, [])
+      const index = users.findIndex((item) => item.id === session.user.id)
+      if (index < 0) return resultError('Local account not found.')
+      const salt = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
+      users[index] = { ...users[index], passwordSalt: salt, passwordHash: await derivePassword(newPassword, salt) }
+      writeJson(USERS_KEY, users)
+      const nextSession = saveSession(users[index])
+      return { data: { user: nextSession.user, session: nextSession }, error: null, isRateLimit: false, retryAfter: 0 }
+    } catch (error) {
+      return resultError(error.message || 'Could not update the password.')
     }
   },
 
-  /**
-   * Subscribe to auth state changes
-   */
   onAuthStateChange(callback) {
-    return supabase.auth.onAuthStateChange(callback)
+    listeners.add(callback)
+    return { data: { subscription: { unsubscribe: () => listeners.delete(callback) } } }
   },
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key === SESSION_KEY) {
+      const session = currentSession()
+      emitAuthChange(session ? 'SIGNED_IN' : 'SIGNED_OUT', session)
+    }
+  })
 }
